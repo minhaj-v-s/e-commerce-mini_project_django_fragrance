@@ -1,0 +1,127 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="master">
+      <div class="nav">
+        <div class="register">Register</div>
+        <div class="login">Login</div>
+        <div class="cart">Cart </div>
+        <!-- <div class="search">Search</div> -->
+        <nav class="navbar bg-body-tertiary">
+          <div class="container-fluid">
+            <form class="d-flex" role="search" method="GET" action="{% url 'home' %}">
+              {%csrf_token%}
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search" value = "{{request.GET.query}}">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+          </div>
+        </nav>
+      </div>
+        <div class="brand-name">Fragrance</div>
+          <div class="tag-line">
+            <div class="text-overlay">Your one stop destination for fragrances <br>
+            <button><a style="text-decoration: none; color: white;" href="#product-part">View Products</a></button>
+            </div>
+        </div>
+    </div>
+    <div class="products" id="product-part">
+      {% for i in products %}
+        <div class="prod{{forloop.counter}}">
+          <img src="{{i.image.url}}" alt="">
+          <div class="prod{{forloop.counter}}-title">{{i.name}}</div>
+          <div class="price">₹{{i.price}}</div> 
+          <span class="btns">
+            <button class="cart-btn"> <a style="text-decoration: none; color: white;"  href="{% url 'cart' i.id %}"> Add to Cart</a></button>
+            <button class="view-btn"><a style="text-decoration: none; color: white;" href="{% url 'product' i.id %}">View Details</a></button>
+            <button class="buy-btn">Buy Now</button>
+          </span>
+        </div>
+        {% endfor %}
+      </div>
+
+
+
+    <!-- <div class="products" id="product-part">
+      <div class="prod1">
+        <img src="../static/images/perfume_3.jpg" alt="">
+        <div class="prod-title">Encre Noire A L'Extreme Lalique for men</div> <br> <br> <br>
+        <div class="price">₹400</div> 
+        <span class="btns">
+          <button class="cart-btn">Add to Cart</button>
+          <button class="view-btn"><a style="text-decoration: none; color: white;" href="/product/">View Details</a></button>
+          <button class="buy-btn">Buy Now</button>
+        </span>
+      </div>
+      <div class="prod2">
+        <img src="../static/images/Royal_mirage.jpg" alt="">
+        <div class="prod2-title">Royal Mirage <br><span class="btns"></span></div> 
+        <div class="price">₹1000</div> 
+        <span class="btns">
+          <button class="cart-btn">Add to Cart</button>
+          <button class="view-btn"><a style="text-decoration: none; color: white;" href="/product/">View Details</a></button>
+          <button class="buy-btn">Buy Now</button>
+        </span>
+      </div>
+      <div class="prod3">
+        <img src="../static/images/Saapil.jpg" alt="">
+        <div class="prod3-title">Saapil</div>
+        <div class="price">₹1100</div> 
+        <span class="btns">
+          <button class="cart-btn">Add to Cart</button>
+          <button class="view-btn"><a style="text-decoration: none; color: white;" href="/product/">View Details</a></button>
+          <button class="buy-btn">Buy Now</button>
+        </span>
+      </div>
+      <div class="prod4">
+        <img src="../static/images/oudh.jpg" alt="">
+        <div class="prod4-title"> Arabian Oudh</div> <br> 
+        <div class="price">₹1200</div> 
+        <span class="btns">
+          <button class="cart-btn">Add to Cart</button>
+          <button class="view-btn"><a style="text-decoration: none; color: white;" href="/product/">View Details</a></button>
+          <button class="buy-btn">Buy Now</button>
+        </span>
+      </div>
+      <div class="prod5"><img src="../static/images/Fogg.jpg" alt="">
+        <div class="prod5-title">Fogg</div> <br> 
+        <div class="price">₹600</div> 
+        <span class="btns">
+          <button class="cart-btn">Add to Cart</button>
+          <button class="view-btn"><a style="text-decoration: none; color: white;" href="/product/">View Details</a></button>
+          <button class="buy-btn">Buy Now</button>
+        </span></div>
+      <div class="prod6">
+        <img src="../static/images/perfume_1.jpg" alt="">
+        <div class="prod6-title">Opus</div> <br> 
+        <div class="price">₹400</div> 
+        <span class="btns">
+          <button class="cart-btn">Add to Cart</button>
+          <button class="view-btn"><a style="text-decoration: none; color: white;" href="/product/">View Details</a></button>
+          <button class="buy-btn">Buy Now</button>
+        </span>
+      </div>
+    </div> -->
+
+
+  
+    <footer class="footer">
+      <h2>Contact Us</h2>
+      <form class="contact-form">
+          <input type="text" placeholder="Your Name" required>
+          <input type="email" placeholder="Your Email" required>
+          <textarea rows="4" placeholder="Your Message" required></textarea>
+          <button type="submit">Send Message</button>
+      </form>
+  </footer>
+
+</body>
+</html>
