@@ -11,6 +11,10 @@ class Products(models.Model):
     def __str__(self):
         return self.name
     
+class Cart(models.Model):
+    product = models.ForeignKey(Products, on_delete=models.CASCADE) 
+    price = models.IntegerField()  
+    quantity = models.IntegerField(null=True, default=1)
 
-    
-
+    def __str__(self):
+      return self.product.name + " - $" +str(self.price)
