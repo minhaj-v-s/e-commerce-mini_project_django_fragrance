@@ -12,9 +12,10 @@
 <body>
     <div class="master">
       <div class="nav">
-        <div class="register">Register</div>
-        <div class="login">Login</div>
-        <div class="cart">Cart </div>
+        <div class="register"> <a style="text-decoration: none; color: white;" href="/register/">Register</a></div>
+        <div class="login"> <a style="text-decoration: none; color: white;" href="/login/">Login</a></div>
+        <div class="cart"> <a style="text-decoration: none; color: white;" href="/view_cart/">Cart</a></div>
+        <div class="login"> <a style="text-decoration: none; color: white;" href="/userlogout/">Logout</a></div>
         <!-- <div class="search">Search</div> -->
         <nav class="navbar bg-body-tertiary">
           <div class="container-fluid">
@@ -33,6 +34,19 @@
             </div>
         </div>
     </div>
+
+    <div class="loggedIn">
+      {% if id %}
+        <p>User Logged in: {{name}}</p>
+    </div>
+      {% endif %}
+
+      <!-- {% if messages %}
+       {% for message in messages%}
+        <p style="color:red;">{{message}}</p>
+       {% endfor %}
+      {% endif %} -->
+
     <div class="products" id="product-part">
       {% for i in products %}
         <div class="prod{{forloop.counter}}">

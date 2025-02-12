@@ -18,3 +18,10 @@ class Cart(models.Model):
 
     def __str__(self):
       return self.product.name + " - $" +str(self.price)
+    
+class Register(models.Model):
+    name = models.CharField(max_length=200)
+    email = models.EmailField(max_length=200)
+    phone = models.CharField(max_length=200)
+    password = models.CharField(max_length=200)
+

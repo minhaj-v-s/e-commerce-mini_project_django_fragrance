@@ -1,11 +1,31 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
 </head>
 <body>
-    
+    <div class="form-div">
+        <h1>Register</h1>
+        <form action="" method="post">
+            {%csrf_token%}
+            <label for="name">Name</label> <br> <br>
+            <input type="text" name="name" placeholder="Enter your name"> <br> <br>
+            <label for="email">Email</label> <br> <br>
+            <input type="email" name="email" placeholder="Enter your email/username"> <br> <br>
+            <label for="phone">Phone</label> <br> <br>
+            <input type="tel" name="phone" placeholder="Enter your phone number"> <br> <br>
+            <label for="new_password">New Password</label> <br> <br>
+            <input type="password" name="new_password" placeholder="New Password"> <br> <br>
+            <label for="confirm_password">Confirm Password</label> <br> <br>
+            <input type="password" name="password" placeholder="Confirm Password"> <br> <br>
+
+            <button type="submit">Submit</button>
+
+        </form>
+    </div>
 </body>
 </html>

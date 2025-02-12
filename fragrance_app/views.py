@@ -1,7 +1,12 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse
-from . models import Products,Cart
+from . models import Products,Cart,Register
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.contrib.messages import get_messages
 # Create your views here.
+
 
 def home(request):
     
@@ -10,8 +15,15 @@ def home(request):
             products = Products.objects.filter(name = query)
         else:  
             products = Products.objects.all()
+        
+        id = request.session.get('id')
+        name = request.session.get('name')
+        if name:
+          return render(request,"home.html",{'products':products,'q':query,'id':id,'name':name} )
+        else:
+          return render(request,"home.html",{'products':products,'q':query})
 
-        return render(request,"home.html",{'products':products,'q':query} )
+        
 
 
 # def cart(request,pk):
@@ -36,6 +48,13 @@ def view_cart(request):
      return render(request,"cart.html",{"cart_products":cart_products,"total_price":total_price})
      
 def cart(request,pk):
+
+     if not request.session.get('id'):
+          storage = get_messages(request)
+          storage.used = True
+          
+          messages.warning(request,"Login to add to cart.")
+          return redirect('login')
      cart_item = get_object_or_404(Products,id=pk)
      cart_product, created = Cart.objects.get_or_create(product = cart_item, defaults = {'price':cart_item.price})
 
@@ -70,3 +89,44 @@ def cart_remove(request,pk,action):
 def product(request,pk):
      thisProduct = Products.objects.get(id = pk)
      return render(request,"product.html",{'thisProduct':thisProduct})
+
+def register(request):
+     if request.method == "POST":
+          name = request.POST.get('name')
+          email = request.POST.get('email')
+          phone = request.POST.get('phone')
+          new_password = request.POST.get('new_password')
+          password = request.POST.get('password')
+
+          if new_password == password:
+               Register(name=name,email=email,phone=phone,password=password).save()
+
+     return render(request,"register.html")
+
+def login(request):
+     return render(request,"login.html")
+
+def userlog(request):
+     if request.method == "POST":
+          username = request.POST.get("username")
+          password = request.POST.get("password")
+
+          check = Register.objects.filter(email=username,password = password)
+
+          if check:
+               user_details = Register.objects.get(email = username,password = password)
+               id = user_details.id
+               name = user_details.name
+               email = user_details.email
+
+               request.session['id'] = id
+               request.session['name'] = name
+
+               return redirect('home')
+          else:
+               return render(request,"login.html")
+
+
+def logoutuser(request):
+     request.session.flush()
+     return redirect('login')
