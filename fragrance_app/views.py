@@ -60,6 +60,12 @@ def cart_update(request,pk,action):
      return redirect('view_cart')
 
 
+def cart_remove(request,pk,action):
+     if action == 'remove':
+
+          cart_item = get_object_or_404(Cart,id=pk)
+          cart_item.delete()
+          return redirect('view_cart')
 
 def product(request,pk):
      thisProduct = Products.objects.get(id = pk)

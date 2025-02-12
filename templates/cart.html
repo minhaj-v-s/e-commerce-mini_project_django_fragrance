@@ -119,7 +119,7 @@
                 <span class="quantity">{{item.quantity}}</span>
                 <button class="quantity-btn"><a style="text-decoration: none; color: white;" href="{% url 'cart_update' item.id 'increment' %}"> +</a></button>
             </div>
-            <button class="remove-btn"> <a style="text-decoration: none; color: white;" href="{% url 'cart_update' item.id 'remove' %}">Remove</a></button> 
+            <button class="remove-btn"> <a style="text-decoration: none; color: white;" href="{% url 'cart_remove' item.id 'remove'  %}">Remove</a></button> 
         </div>
     {% endfor %}
 
