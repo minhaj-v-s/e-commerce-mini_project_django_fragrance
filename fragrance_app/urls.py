@@ -11,4 +11,8 @@ urlpatterns = [
     path("login/",views.login,name="login"),
     path("userlog/",views.userlog,name="userlog"),
     path("userlogout/",views.logoutuser,name="userlogout"),
+    path("purchase_history/",views.purchase_history,name="purchase_history"),
+    path("download_invoice/<str:order_id>/",views.download_invoice,name="download_invoice"),
+    path("cancel_order/<str:order_id>/",views.cancel_order,name="cancel_order"),
+    path("checkout/",views.checkout,name="checkout"),
 ]

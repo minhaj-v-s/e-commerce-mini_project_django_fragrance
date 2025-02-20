@@ -1,10 +1,12 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse
-from . models import Products,Cart,Register
+from . models import Products,Cart,Register,OrderHistory
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.messages import get_messages
+from reportlab.pdfgen import canvas
+
 # Create your views here.
 
 
@@ -52,7 +54,7 @@ def cart(request,pk):
      if not request.session.get('id'):
           storage = get_messages(request)
           storage.used = True
-          
+
           messages.warning(request,"Login to add to cart.")
           return redirect('login')
      cart_item = get_object_or_404(Products,id=pk)
@@ -130,3 +132,79 @@ def userlog(request):
 def logoutuser(request):
      request.session.flush()
      return redirect('login')
+
+
+def checkout(request):
+     if not request.session.get('id'):
+          messages.warning(request,"Login to proceed with checkout.")
+          return redirect("login")
+
+     user_id = request.session.get('id')
+     user = Register.objects.get(id = user_id)
+     cart_items = Cart.objects.all()
+
+     if not cart_items:
+          messages.error(request,"Your Cart is empty!")
+          return redirect("view_cart")
+     
+     for item in cart_items:
+          OrderHistory.objects.create(
+               user = user,
+               product = item.product,
+               quantity = item.quantity,
+               total_price = item.price * item.quantity,
+          )
+
+     cart_items.delete()
+
+     messages.success(request,"Purchase successfull! Your order has been recorded.")
+     return redirect("purchase_history")
+
+
+def purchase_history(request):
+     if not request.session.get('id'):
+          messages.warning(request,"Login to view purchase history.")
+          return redirect("login")
+     
+     user_id = request.session.get('id')
+     user = Register.objects.get(id = user_id)
+     orders = OrderHistory.objects.filter(user = user).order_by("-purchased_at")
+
+     return render(request,"purchase_history.html",{"orders":orders})
+
+def download_invoice(request, order_id):
+     order = OrderHistory.objects.get(id = order_id)
+
+     response = HttpResponse(content_type = "application/pdf")
+     response['Content-Disposition'] = f'attachment; filename ="invoice_{order.id}.pdf'
+
+     p = canvas.Canvas(response)
+     p.drawString(100,800,"Invoice")
+     p.drawString(100,780, f"Order ID: {order.id}")
+     p.drawString(100,760, f"Customer: {order.user.name}")
+     p.drawString(100,740, f"Product: {order.product.name}")
+     p.drawString(100,720, f"Quantity: {order.quantity}")
+     p.drawString(100,700, f"Total Price: ₹{order.total_price}")
+     p.drawString(100,680, f"Date: {order.purchased_at}")
+
+     p.showPage()
+     p.save()
+
+     return response
+
+
+def cancel_order(request,order_id):
+     user_id = request.session.get('id')
+     user = Register.objects.get(id = user_id)
+     order = get_object_or_404(OrderHistory,id=order_id,user=user)
+
+     if order.status != 'Cancelled':
+          order.status = 'Cancelled'
+          order.save()
+          messages.success(request,"Order has been cancelled.")
+
+     else:
+          messages.warning(request,"Order is already cancelled.")
+
+     return redirect("purchase_history")
+     

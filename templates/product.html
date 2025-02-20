@@ -77,8 +77,8 @@
         <div class="product-price">₹{{thisProduct.price}}</div>
         <div class="product-description">{{thisProduct.description}}</div>
         <div class="btns">
-            <button class="cart-btn">Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
+            <button class="cart-btn"> <a style="text-decoration: none; color: white;"  href="{% url 'cart' thisProduct.id %}"> Add to Cart</a></button>
+            <button class="buy-btn"><a style="text-decoration: none; color: white;" href="{% url 'cart' thisProduct.id %}">Buy Now</a></button>
         </div>
     </div>
 </body>
