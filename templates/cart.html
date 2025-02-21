@@ -132,8 +132,15 @@
 {% endif %}
 
         <div class="cart-footer">
-            <button class="checkout-btn"> <a style="color: white; text-decoration: none;" href="/checkout/">Proceed to Checkout</a></button>
+            <button class="checkout-btn"> <a style="color: white; text-decoration: none;" href="/checkout/" onclick="purchased()">Proceed to Checkout</a></button>
         </div>
     </div>
+
+
+    <script>
+        function purchased(){
+            alert("Purchase completed successfully");
+        }
+    </script>
 </body>
 </html>
